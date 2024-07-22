@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,3 +17,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', \App\Http\Controllers\IndexController::class)->name('index');
+
+// Feedbacks
+
+Route::resource('feedbacks',FeedbackController::class);
