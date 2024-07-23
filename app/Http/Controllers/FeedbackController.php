@@ -14,8 +14,8 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Feedbacks/Index', [
-            'feedbacks' => Feedback::all(),
+        return Inertia::render('Feedback/Index', [
+            'feedbacks' => Feedback::with('user')->get(),
         ]);
     }
 
@@ -24,7 +24,7 @@ class FeedbackController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Feedbacks/Create');
+        return Inertia::render('Feedback/Create');
     }
 
     /**

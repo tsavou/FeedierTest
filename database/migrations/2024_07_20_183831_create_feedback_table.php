@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->nullable()->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('email')-> nullable();
             $table->text('message');
             $table->enum('source', ['EXTERNAL', 'DASHBOARD'])->default('DASHBOARD');
 
             $table->timestamps();
 
-            $table->unique(['user_id', 'created_at']); 
+            $table->unique(['user_id', 'created_at']);
         });
     }
 
