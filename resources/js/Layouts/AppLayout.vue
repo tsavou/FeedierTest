@@ -55,7 +55,7 @@ const logout = () => {
                                     Feedback
                                 </NavLink>
                                 <NavLink :href="route('feedbacks.create')" :active="route().current('feedbacks.create')">
-                                    Submit Feedback
+                                    New Feedback
                                 </NavLink>
                             </div>
                         </div>

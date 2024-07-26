@@ -3,8 +3,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({
     feedbacks: Array,
-    user: Object
-})
+    })
 
 </script>
 
@@ -13,11 +12,13 @@ defineProps({
 
     <AppLayout title="Feedbacks">
 
+
         <div v-for="feedback in feedbacks" :key="feedback.id">
             <div>
 
                 <ul>
-                    <li>User: {{ feedback.user_id ? feedback.user.name : feedback.email }} </li>
+                    <li v-if="feedback.user_id" >User:{{ feedback.user.name }} </li>
+                    <li>Email: {{ feedback.user_id ? feedback.user.email : feedback.email }} </li>
                     <li>MESSAGE{{ feedback.message }}</li>
                     <li>LE {{ feedback.created_at }}</li>
                     <li>SOURCE: {{ feedback.source }}</li>

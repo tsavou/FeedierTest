@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+
 
 class FeedbackController extends Controller
 {
@@ -19,29 +22,62 @@ class FeedbackController extends Controller
         ]);
     }
 
+
     /**
      * Show the form for submitting a new feedback.
      */
     public function create()
     {
-        return Inertia::render('Feedback/Create');
+        // Check if user is logged in
+        $user = Auth::user();
+        $timer = null;
+
+        if ($user) {
+            // Check if user has already sent a feedback in the last hour
+            $FeedbackSubHour=Feedback::where('user_id', $user->id)
+            ->where('created_at', '>=', now()->subHour())
+            ->first();
+
+            // If user has already sent a feedback in the last hour, calculate the timer until he can send another one
+            if ($FeedbackSubHour) {
+                $timer = $FeedbackSubHour->created_at-> addHour()-> diffInSeconds(now());
+            }
+
+
+        }
+
+
+        return Inertia::render('Feedback/Create', [
+            'user' => Auth::user(),
+            'timer' => $timer,
+        ]);
     }
 
     /**
      * Store a newly created feedback in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-
-        $request->validate([
-            'email' => 'nullable|email',
-            'message'=> 'required|string',
-        ]);
 
         // Verify if user is logged in
         $user = Auth::user();
-        $userId= $user ? Auth::id() : null; //returns user id if user is logged in
+        $userId = $user ? Auth::id() : null; //returns user id if user is logged in
         $email = $request->email;
+
+        // validate request
+        $rules = [
+            'message' => 'required|string',
+        ];
+
+        if ($userId) {
+            $rules['email'] = 'nullable|email';
+        } else {
+            $rules['email'] = 'required|email';
+        }
+
+
+        $request->validate($rules);
+
 
         // Limit 1 feedback per hour for a unique user
 
@@ -53,8 +89,8 @@ class FeedbackController extends Controller
             }
         })->where('created_at', '>=', now()->subHour())->first();
 
-        if ($feedback){
-            return to_route('feedbacks.create')->with('error', 'You can only submit one feedback per hour.');
+        if ($feedback) {
+            return Redirect::route('feedbacks.create')->with('error', 'You can only submit 1 feedback per hour.');
         }
 
 
@@ -67,9 +103,9 @@ class FeedbackController extends Controller
             'message' => $request->message,
             // 'source' => 'DASHBOARD'
         ]);
+        
 
-        return to_route('feedbacks.index')->with('success', 'Feedback submitted successfully.');
-
+        return Redirect::route('feedbacks.create')->with('success', 'Feedback submitted successfully.');
     }
 
     /**
@@ -97,10 +133,13 @@ class FeedbackController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a feedback
      */
     public function destroy(string $id)
     {
-        //
+
+        $feedback = Feedback::find($id);
+        $feedback->delete();
+        return to_route('feedbacks.index')->with('success', 'Feedback deleted successfully.');
     }
 }
