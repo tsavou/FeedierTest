@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // execute the command to get external feedbacks every day at midnight
+        $schedule->command('app:get-external-feedbacks')->everyTenSeconds();
     }
 
     /**
@@ -24,4 +27,5 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+
 }
