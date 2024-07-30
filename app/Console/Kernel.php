@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         // execute the command to get external feedbacks every day at midnight
-        $schedule->command('app:get-external-feedbacks')->everyTenSeconds();
+        $schedule->command('app:get-external-feedbacks')->daily();
     }
 
     /**
