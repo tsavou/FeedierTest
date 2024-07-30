@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\FeedbackController;
+use App\Http\Middleware\CheckUserIsStaff;
+use App\Models\Feedback;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,4 +22,12 @@ Route::get('/', \App\Http\Controllers\IndexController::class)->name('index');
 
 // Feedbacks
 
-Route::resource('feedbacks',FeedbackController::class);
+Route::resource('feedbacks', FeedbackController::class)
+    ->except(['index', 'destroy']);
+
+
+// Route for staff to see feedbacks and delete
+Route::middleware(CheckUserIsStaff::class)->group(function () {
+    Route::resource('feedbacks', FeedbackController::class)
+        ->only(['index', 'destroy']);
+});

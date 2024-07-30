@@ -34,16 +34,14 @@ class FeedbackController extends Controller
 
         if ($user) {
             // Check if user has already sent a feedback in the last hour
-            $FeedbackSubHour=Feedback::where('user_id', $user->id)
-            ->where('created_at', '>=', now()->subHour())
-            ->first();
+            $FeedbackSubHour = Feedback::where('user_id', $user->id)
+                ->where('created_at', '>=', now()->subHour())
+                ->first();
 
             // If user has already sent a feedback in the last hour, calculate the timer until he can send another one
             if ($FeedbackSubHour) {
-                $timer = $FeedbackSubHour->created_at-> addHour()-> diffInSeconds(now());
+                $timer = $FeedbackSubHour->created_at->addHour()->diffInSeconds(now());
             }
-
-
         }
 
 
@@ -103,7 +101,7 @@ class FeedbackController extends Controller
             'message' => $request->message,
             // 'source' => 'DASHBOARD'
         ]);
-        
+
 
         return Redirect::route('feedbacks.create')->with('success', 'Feedback submitted successfully.');
     }
@@ -138,8 +136,12 @@ class FeedbackController extends Controller
     public function destroy(string $id)
     {
 
-        $feedback = Feedback::find($id);
+        $feedback = Feedback::findOrFail($id);
         $feedback->delete();
-        return to_route('feedbacks.index')->with('success', 'Feedback deleted successfully.');
+
+
+        return Redirect::route('feedbacks.index')->with('success', 'Feedback deleted successfully.');
+
+
     }
 }
