@@ -18,7 +18,8 @@ class FeedbackController extends Controller
     public function index()
     {
         return Inertia::render('Feedback/Index', [
-            'feedbacks' => Feedback::with('user')->get(),
+            'feedbacks' => Feedback::withTrashed()->with('user')->get(),
+
         ]);
     }
 
@@ -139,9 +140,23 @@ class FeedbackController extends Controller
         $feedback = Feedback::findOrFail($id);
         $feedback->delete();
 
+        // or
+        // Feedback::destroy($id);
+
 
         return Redirect::route('feedbacks.index')->with('success', 'Feedback deleted successfully.');
 
 
+    }
+
+    /**
+     * Restore a deleted feedback
+     */
+    public function restore(string $id)
+    {
+        $feedback = Feedback::withTrashed()->findOrFail($id);
+        $feedback->restore();
+
+        return Redirect::route('feedbacks.index')->with('success', 'Feedback restored successfully.');
     }
 }

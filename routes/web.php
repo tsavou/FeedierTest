@@ -29,5 +29,8 @@ Route::resource('feedbacks', FeedbackController::class)
 // Route for staff to see feedbacks and delete
 Route::middleware(CheckUserIsStaff::class)->group(function () {
     Route::resource('feedbacks', FeedbackController::class)
-        ->only(['index', 'destroy']);
+        ->only(['index', 'destroy', 'restore']);
+
+    Route::post('feedbacks/{feedback}/restore', [FeedbackController::class, 'restore'])->name('feedbacks.restore');
+
 });
