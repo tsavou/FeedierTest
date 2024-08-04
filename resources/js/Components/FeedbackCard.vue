@@ -2,6 +2,7 @@
 
 import DangerButton from '@/Components/DangerButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Rating from '@/Components/Rating.vue';
 import { router } from '@inertiajs/vue3';
 
 
@@ -48,7 +49,7 @@ const restoreFeedback = (id) => {
 
                 <div v-else>
                     <div class="text-sm font-medium text-gray-900">
-                        Feedback from {{ feedback.source }}
+                        Feedback from {{ feedback.source_name }}
                     </div>
 
                 </div>
@@ -60,7 +61,7 @@ const restoreFeedback = (id) => {
             </div>
 
             <div class="mt-4 ">
-                <p class="text-sm text-gray-500">
+                <p class="text-sm text-gray-500 mt-2">
                     {{ feedback.message }}
                 </p>
             </div>
@@ -71,8 +72,11 @@ const restoreFeedback = (id) => {
             <span>Deleted at {{ new Date(feedback.deleted_at).toLocaleDateString() }}</span>
         </div>
 
-        <!-- Button -->
-        <div class="flex justify-end border-t border-gray-200 pt-2">
+
+        <div class="flex justify-between border-t border-gray-200 pt-2">
+
+            <Rating :value="feedback.rating" :readonly=true />
+
             <DangerButton v-if="!feedback.deleted_at" @click="deleteFeedback(feedback.id)">
                 Delete
             </DangerButton>

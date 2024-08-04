@@ -100,6 +100,7 @@ class FeedbackController extends Controller
             'user_id' => $userId,
             'email' => $email,
             'message' => $request->message,
+            'rating' => $request->rating,
             // 'source' => 'DASHBOARD'
         ]);
 

@@ -11,6 +11,7 @@ import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ActionMessage from '@/Components/ActionMessage.vue';
+import Rating from '@/Components/Rating.vue';
 
 
 const props = defineProps({
@@ -71,7 +72,8 @@ const nextSubmissionTime = computed(() => {
 
 const form = useForm({
     email: '',
-    message: ''
+    message: '',
+    rating: 3,
 });
 
 
@@ -171,6 +173,16 @@ const submit = () => {
                                 <InputError :message="form.errors.email" class="mt-2" />
                             </div>
 
+                            <!-- Rating -->
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <InputLabel for="rating" value="Rate your experience :" />
+                                <Rating id="rating" v-model:value="form.rating" />
+
+                                <InputError :message="form.errors.rating" class="mt-2" />
+                            </div>
+
+                            <!-- Message -->
                             <div class="col-span-6 sm:col-span-4">
                                 <InputLabel for="message" value="Message :" />
                                 <textarea

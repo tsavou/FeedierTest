@@ -12,7 +12,7 @@ class GetExternalFeedbacks extends Command
      *
      * @var string
      */
-    protected $signature = 'app:get-external-feedbacks >>/home/theo/FeedierTest/storage/logs/laravel.log 2>&1';
+    protected $signature = 'app:get-external-feedbacks';
 
     /**
      * The console command description.
@@ -78,6 +78,8 @@ class GetExternalFeedbacks extends Command
                         'email' => null,
                         'message' => $feedback['Reviews Content'],
                         'source' => 'EXTERNAL',
+                        'source_name'=> $feedback['Source'],
+                        'rating' => $feedback['Rating'],
 
                     ]
                 );

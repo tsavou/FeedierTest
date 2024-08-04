@@ -16,6 +16,8 @@ class Feedback extends Model
         'email',
         'message',
         'source',
+        'source_name',
+        'rating'
     ];
 
 
