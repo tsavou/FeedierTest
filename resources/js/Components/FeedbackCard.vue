@@ -2,8 +2,11 @@
 
 import DangerButton from '@/Components/DangerButton.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import Rating from '@/Components/Rating.vue';
+import DialogModal from '@/Components/DialogModal.vue';
 import { router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 
 defineProps({
@@ -11,18 +14,29 @@ defineProps({
 })
 
 const deleteFeedback = (id) => {
-    if (confirm('Are you sure you want to delete this feedback?')) {
-        router.delete(route('feedbacks.destroy', id), {
-            preserveScroll: true,
-        });
-    }
-}
+    router.delete(route('feedbacks.destroy', id), {
+        preserveScroll: true,
+        onSuccess: () => closeModal(),
+    });
+};
 
 const restoreFeedback = (id) => {
     router.post(route('feedbacks.restore', id), {
         preserveScroll: true,
     })
-}
+};
+
+const ConfirmDelete = ref(false);
+
+const ShowConfirmDelete = () => {
+    ConfirmDelete.value = true;
+};
+
+const closeModal = () => {
+    ConfirmDelete.value = false;
+};
+
+
 
 
 </script>
@@ -77,7 +91,7 @@ const restoreFeedback = (id) => {
 
             <Rating :value="feedback.rating" :readonly=true />
 
-            <DangerButton v-if="!feedback.deleted_at" @click="deleteFeedback(feedback.id)">
+            <DangerButton v-if="!feedback.deleted_at" @click="ShowConfirmDelete">
                 Delete
             </DangerButton>
 
@@ -90,6 +104,35 @@ const restoreFeedback = (id) => {
 
 
     </div>
+
+    <DialogModal :show="ConfirmDelete" @close="closeModal">
+
+        <template #title>
+            Delete Feedback
+        </template>
+
+
+        <template #content>
+            Are you sure you want to delete this feedback?
+        </template>
+
+
+        <template #footer>
+
+            <SecondaryButton @click="closeModal">
+                Cancel
+            </SecondaryButton>
+
+            <DangerButton class="ms-3" @click="deleteFeedback(feedback.id)">
+                Delete
+            </DangerButton>
+        </template>
+
+
+
+
+
+    </DialogModal>
 
 
 

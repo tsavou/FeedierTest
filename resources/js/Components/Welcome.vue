@@ -1,5 +1,6 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import {Link} from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -8,19 +9,19 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
             <ApplicationLogo class="block h-12 w-auto" />
 
             <h1 class="mt-8 text-2xl font-medium text-gray-900">
-                Thanks for applying to Feedier!
+                Welcome to Feedier!
             </h1>
 
             <div class="mt-6 space-y-1">
                 <p class="text-gray-500 leading-relaxed">
-                    One of the key stages of our recruitment process is the technical test. All developers on our team go through this stage in order to be able to join Feedier.
+                    On this platform, you can <Link :href="route('feedbacks.create')" class="underline font-semibold hover:text-gray-900">submit a feedback</Link> every hour as a user logged or not. You can <Link :href="route('register')" class="underline font-semibold hover:text-gray-900">register</Link> or simply provide your email address.
                 </p>
 
                 <p class="text-gray-500 leading-relaxed">
-                    The purpose of this test is mainly to see your adaptability and your comfort on our technical stack.
+                    As a staff member, you can <Link :href="route('feedbacks.index')" class="underline font-semibold hover:text-gray-900">view all feedbacks</Link> received on the platform.
                 </p>
                 <p class="text-gray-500 leading-relaxed">
-                    This site uses the same technical stack as Feedier: VueJS, InertiaJS, Laravel and TailwindCSS. More commonly called <span class="font-semibold text-gray-700">VILT Stack</span>.
+                    External feedbacks are collected on the platform every day.
                 </p>
             </div>
         </div>
